@@ -1,9 +1,18 @@
+#pragma once
+
 #include <fmt/core.h>
 #include <fmt/color.h>
 #include <fmt/os.h>
+#include <memory>
+#include <thread>
+#include <atomic>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
 #include <stdint.h>
 #include <string>
 #include <map>
+
 
 class Logger {
 public:
