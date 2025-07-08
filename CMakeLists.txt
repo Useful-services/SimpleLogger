@@ -16,8 +16,12 @@ FetchContent_MakeAvailable(fmt)
 
 add_library(LOGGER source/Logger.cpp include/Logger.hpp)
 target_link_libraries(LOGGER
-  PRIVATE
+  PUBLIC
   fmt::fmt
+)
+target_include_directories(LOGGER
+  PUBLIC
+  include
 )
 
 add_executable(LOGGER_EXAMPLE examples/Logger_example.cpp)
