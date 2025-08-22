@@ -13,7 +13,6 @@
 #include <string>
 #include <map>
 
-
 class Logger {
 public:
   enum class MSG_TYPE {
@@ -41,6 +40,15 @@ public:
 
   void print(const std::string& message, MSG_TYPE type, const std::string& output_file_path = "") const;
   void println(const std::string& message, MSG_TYPE type, const std::string& output_file_path = "") const;
+
+  void print_info(const std::string& message, const std::string& output_file_path = "") const;
+  void print_warning(const std::string& message, const std::string& output_file_path = "") const;
+  void print_error(const std::string& message, const std::string& output_file_path = "") const;
+
+  void print_info_ln(const std::string& message, const std::string& output_file_path = "") const;
+  void print_warning_ln(const std::string& message, const std::string& output_file_path = "") const;
+  void print_error_ln(const std::string& message, const std::string& output_file_path = "") const;
+
 private:
 
   template<bool new_line>

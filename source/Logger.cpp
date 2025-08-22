@@ -73,3 +73,23 @@ void Logger::print_formatted_text(const std::string& formatted_message, Logger::
     fmt::print(fg(fmt::rgb(color.r, color.g, color.b)), "{}", formatted_message);
   }
 }
+
+void Logger::print_info(const std::string& message, const std::string& output_file_path) const {
+  print(message, MSG_TYPE::INFO, output_file_path);
+}
+void Logger::print_warning(const std::string& message, const std::string& output_file_path) const {
+  print(message, MSG_TYPE::WARNING, output_file_path);
+}
+void Logger::print_error(const std::string& message, const std::string& output_file_path) const {
+  print(message, MSG_TYPE::ERROR, output_file_path);
+}
+
+void Logger::print_info_ln(const std::string& message, const std::string& output_file_path) const {
+  println(message, MSG_TYPE::INFO, output_file_path);
+}
+void Logger::print_warning_ln(const std::string& message, const std::string& output_file_path) const {
+  println(message, MSG_TYPE::WARNING, output_file_path);
+}
+void Logger::print_error_ln(const std::string& message, const std::string& output_file_path) const {
+  println(message, MSG_TYPE::ERROR, output_file_path);
+}
