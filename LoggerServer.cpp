@@ -23,6 +23,7 @@ int main() {
           logger.print_info_ln(str);
           break;
       }
+      server.send({});
     }
   });
 

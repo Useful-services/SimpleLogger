@@ -1,38 +1,39 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.20)
 
 project(DatabaseWrapper CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-set(BUILD_TESTS OFF)
-set(CPPZMQ_BUILD_TESTS OFF)
+# include(FetchContent)
 
-include(FetchContent)
+# FetchContent_Declare(
+#   fmt
+#   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+#   GIT_TAG master
+# )
 
-FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG master
-)
+# FetchContent_Declare(
+#   zeromq
+#   GIT_REPOSITORY https://github.com/zeromq/libzmq.git
+#   GIT_TAG v4.3.4
+# )
 
-FetchContent_Declare(
-  zeromq
-  GIT_REPOSITORY https://github.com/zeromq/libzmq.git
-  GIT_TAG v4.3.4
-)
-
-FetchContent_Declare(
-  cppzmq
-  GIT_REPOSITORY https://github.com/zeromq/cppzmq.git
-  GIT_TAG v4.9.0
-)
+# FetchContent_Declare(
+#   cppzmq
+#   GIT_REPOSITORY https://github.com/zeromq/cppzmq.git
+#   GIT_TAG v4.9.0
+# )
 
 set(BUILD_SHARED OFF CACHE BOOL "Build static library")
 set(BUILD_STATIC ON CACHE BOOL "Enable static build")
 set(WITH_DOCS OFF CACHE BOOL "Disable docs")
 
-FetchContent_MakeAvailable(fmt zeromq cppzmq)
+# FetchContent_MakeAvailable(fmt zeromq cppzmq)
+
+add_subdirectory(submodules/libzmq)
+add_subdirectory(submodules/cppzmq)
+add_subdirectory(submodules/fmt)
 
 add_library(LOGGER source/Logger.cpp)
 
