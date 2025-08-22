@@ -29,9 +29,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(libzmq fmt)
 
 add_library(LOGGER STATIC source/Logger.cpp)
-
-add_library(ZMQ STATIC source/ZMQClient.cpp source/ZMQServer.cpp)
-
 target_link_libraries(LOGGER PUBLIC
   fmt::fmt
 )
@@ -39,6 +36,7 @@ target_include_directories(LOGGER PUBLIC
   include
 )
 
+add_library(ZMQ STATIC source/ZMQClient.cpp source/ZMQServer.cpp)
 target_link_libraries(ZMQ PUBLIC
   libzmq-static
 )
@@ -47,17 +45,21 @@ target_include_directories(ZMQ PUBLIC
   ${libzmq_SOURCE_DIR}/include
 )
 
-add_executable(LOGGER_EXAMPLE examples/Logger_example.cpp)
-target_link_libraries(LOGGER_EXAMPLE PRIVATE LOGGER)
+if (SIMPLE_LOGGER_BUILD_EXAMPLES)
+  
+  add_executable(LOGGER_EXAMPLE examples/Logger_example.cpp)
+  target_link_libraries(LOGGER_EXAMPLE PRIVATE LOGGER)
 
-add_executable(TEST_SERVER test.cpp)
-target_link_libraries(TEST_SERVER PRIVATE ZMQ)
+  add_executable(TEST_SERVER test.cpp)
+  target_link_libraries(TEST_SERVER PRIVATE ZMQ)
 
-add_executable(TEST_CLIENT client.cpp)
-target_link_libraries(TEST_CLIENT PRIVATE ZMQ)
+  add_executable(TEST_CLIENT client.cpp)
+  target_link_libraries(TEST_CLIENT PRIVATE ZMQ)
 
-add_executable(COOL_LOGGER LoggerServer.cpp)
-target_link_libraries(COOL_LOGGER PRIVATE ZMQ LOGGER)
+  add_executable(COOL_LOGGER LoggerServer.cpp)
+  target_link_libraries(COOL_LOGGER PRIVATE ZMQ LOGGER)
 
-add_executable(LOGGER_USER LoggerClient.cpp)
-target_link_libraries(LOGGER_USER PRIVATE ZMQ LOGGER)
+  add_executable(LOGGER_USER LoggerClient.cpp)
+  target_link_libraries(LOGGER_USER PRIVATE ZMQ LOGGER)
+
+endif()
