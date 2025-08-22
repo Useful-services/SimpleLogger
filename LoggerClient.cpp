@@ -1,6 +1,5 @@
 #include <string>
 #include <iostream>
-#include <Windows.h>
 
 #include <ZMQClient.hpp>
 
@@ -11,16 +10,12 @@ int main() {
     client.send("Some infoi");
     client.receive(buffer, sizeof(buffer));
   });
-
-  Sleep(3000);
   
   client.start([&]{
     char buffer[1024];
     client.send("Warningw");
     client.receive(buffer, sizeof(buffer));
   });
-
-  Sleep(3000);
 
   client.start([&]{
     char buffer[1024];
