@@ -7,25 +7,25 @@
 int main() {
   ZMQClient client = ZMQClient("tcp://localhost:5555");
   client.start([&]{
-    zmq::message_t reply;
+    char buffer[1024];
     client.send("Some infoi");
-    client.receive(reply);
+    client.receive(buffer, sizeof(buffer));
   });
 
   Sleep(3000);
   
   client.start([&]{
-    zmq::message_t reply;
+    char buffer[1024];
     client.send("Warningw");
-    client.receive(reply);
+    client.receive(buffer, sizeof(buffer));
   });
 
   Sleep(3000);
 
   client.start([&]{
-    zmq::message_t reply;
+    char buffer[1024];
     client.send("Errore");
-    client.receive(reply);
+    client.receive(buffer, sizeof(buffer));
   });
 
   return 0;

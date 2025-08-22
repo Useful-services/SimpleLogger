@@ -9,13 +9,16 @@ int main() {
   client.start([&]{
     for (auto request_num = 0; request_num < 10; ++request_num) {
       std::cout << "Sending Hello " << request_num << "..." << std::endl;
-      client.send(data, zmq::send_flags::none);
+      client.send(data);
       
-      zmq::message_t reply{};
-      client.receive(reply, zmq::recv_flags::none);  
-      std::cout << "Received " << reply.to_string(); 
-      std::cout << " (" << request_num << ")";
-      std::cout << std::endl;
+      char buffer[1024];
+      auto result = client.receive(buffer, sizeof(buffer));
+      if (result > 0) {
+        std::string reply(buffer, result);
+        std::cout << "Received " << reply; 
+        std::cout << " (" << request_num << ")";
+        std::cout << std::endl;
+      }
     }
   });
 

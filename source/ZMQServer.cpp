@@ -1,21 +1,27 @@
 #include <ZMQServer.hpp>
+#include <cstring>
 
 ZMQServer::ZMQServer(const std::string& addr) {
-  context = zmq::context_t(1);
-  socket = zmq::socket_t{context, zmq::socket_type::rep};
-  socket.bind(addr);
+  context = zmq_ctx_new();
+  socket = zmq_socket(context, ZMQ_REP);
+  zmq_bind(socket, addr.c_str());
 }
 
-zmq::socket_t* ZMQServer::get_socket() {
-  return &socket;
+ZMQServer::~ZMQServer() {
+  if (socket) zmq_close(socket);
+  if (context) zmq_ctx_destroy(context);
 }
 
-zmq::recv_result_t ZMQServer::receive(zmq::message_t& request, zmq::recv_flags flags) {
-  return socket.recv(request, flags);
+void* ZMQServer::get_socket() {
+  return socket;
 }
 
-zmq::send_result_t ZMQServer::send(const std::string& data, zmq::send_flags flags) {
-  return socket.send(zmq::buffer(data), flags);
+int ZMQServer::receive(void* buffer, size_t size, int flags) {
+  return zmq_recv(socket, buffer, size, flags);
+}
+
+int ZMQServer::send(const std::string& data, int flags) {
+  return zmq_send(socket, data.c_str(), data.length(), flags);
 }
 
 void ZMQServer::start(const std::function<void()>& action) {

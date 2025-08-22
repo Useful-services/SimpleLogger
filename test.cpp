@@ -8,9 +8,12 @@ int main() {
   const std::string data{"World"};
   server.start([&]{
     for(;;) {
-      zmq::message_t request;
-      auto result = server.receive(request);
-      std::cout << "Received " << request.to_string() << std::endl;
+      char buffer[1024];
+      auto result = server.receive(buffer, sizeof(buffer));
+      if (result > 0) {
+        std::string request(buffer, result);
+        std::cout << "Received " << request << std::endl;
+      }
       server.send(data);
     }
   });

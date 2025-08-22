@@ -2,19 +2,20 @@
 
 #include <functional>
 #include <string>
-#include <zmq.hpp>
+#include <zmq.h>
 
 class ZMQServer {
 public:
   ZMQServer(const std::string& addr);
+  ~ZMQServer();
 
-  zmq::socket_t* get_socket();
+  void* get_socket();
 
-  zmq::recv_result_t receive(zmq::message_t& request, zmq::recv_flags flags = zmq::recv_flags::none);
-  zmq::send_result_t send(const std::string& data, zmq::send_flags flags = zmq::send_flags::none);
+  int receive(void* buffer, size_t size, int flags = 0);
+  int send(const std::string& data, int flags = 0);
 
   void start(const std::function<void()>& action);
 private:
-  zmq::context_t context;
-  zmq::socket_t socket;
+  void* context;
+  void* socket;
 };

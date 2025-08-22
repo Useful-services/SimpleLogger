@@ -5,39 +5,32 @@ project(DatabaseWrapper CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-# include(FetchContent)
-
-# FetchContent_Declare(
-#   fmt
-#   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-#   GIT_TAG master
-# )
-
-# FetchContent_Declare(
-#   zeromq
-#   GIT_REPOSITORY https://github.com/zeromq/libzmq.git
-#   GIT_TAG v4.3.4
-# )
-
-# FetchContent_Declare(
-#   cppzmq
-#   GIT_REPOSITORY https://github.com/zeromq/cppzmq.git
-#   GIT_TAG v4.9.0
-# )
-
+# ZMQ build options
 set(BUILD_SHARED OFF CACHE BOOL "Build static library")
 set(BUILD_STATIC ON CACHE BOOL "Enable static build")
 set(WITH_DOCS OFF CACHE BOOL "Disable docs")
+set(WITH_TESTS OFF CACHE BOOL "Disable tests")
+set(WITH_PERF_TOOL OFF CACHE BOOL "Disable perf tool")
 
-# FetchContent_MakeAvailable(fmt zeromq cppzmq)
+include(FetchContent)
 
-add_subdirectory(submodules/libzmq)
-add_subdirectory(submodules/cppzmq)
-add_subdirectory(submodules/fmt)
+FetchContent_Declare(
+  libzmq
+  GIT_REPOSITORY https://github.com/zeromq/libzmq.git
+  GIT_TAG v4.3.5
+)
 
-add_library(LOGGER source/Logger.cpp)
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 10.2.1
+)
 
-add_library(ZMQ source/ZMQClient.cpp source/ZMQServer.cpp)
+FetchContent_MakeAvailable(libzmq fmt)
+
+add_library(LOGGER STATIC source/Logger.cpp)
+
+add_library(ZMQ STATIC source/ZMQClient.cpp source/ZMQServer.cpp)
 
 target_link_libraries(LOGGER PUBLIC
   fmt::fmt
@@ -48,10 +41,10 @@ target_include_directories(LOGGER PUBLIC
 
 target_link_libraries(ZMQ PUBLIC
   libzmq-static
-  cppzmq
 )
 target_include_directories(ZMQ PUBLIC
   include
+  ${libzmq_SOURCE_DIR}/include
 )
 
 add_executable(LOGGER_EXAMPLE examples/Logger_example.cpp)
