@@ -43,8 +43,6 @@ target_include_directories(LOGGER PUBLIC
   include
 )
 
-include_directories(include/custom_types)
-
 add_library(ZMQ STATIC source/ZMQClient.cpp source/ZMQServer.cpp)
 target_link_libraries(ZMQ PUBLIC
   libzmq-static

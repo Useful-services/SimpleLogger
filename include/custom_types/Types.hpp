@@ -3,7 +3,6 @@
 
 // can be scaled by increasing MY_BUFFER_SIZE in CMakeLists.txt
 // TODO: add headers to handle data in multiple packages
-// TODO: move it to Simple Logger
 struct MQData {
 
   static MQData from_buffer(char buffer[MY_BUFFER_SIZE]) {
