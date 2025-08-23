@@ -5,15 +5,22 @@ project(DatabaseWrapper CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
+# set(SIMPLE_LOGGER_BUILD_EXAMPLES ON)
+
+if (CUSTOM_BUFFER_SIZE)
+  add_compile_definitions(MY_BUFFER_SIZE=${CUSTOM_BUFFER_SIZE})
+else()
+  add_compile_definitions(MY_BUFFER_SIZE=1024)
+endif()
+
 # ZMQ build options
 set(BUILD_SHARED OFF CACHE BOOL "Build static library")
 set(BUILD_STATIC ON CACHE BOOL "Enable static build")
-set(WITH_DOCS OFF CACHE BOOL "Disable docs")
-set(WITH_TESTS OFF CACHE BOOL "Disable tests")
 set(WITH_PERF_TOOL OFF CACHE BOOL "Disable perf tool")
 
 include(FetchContent)
 
+set(ZMQ_BUILD_TESTS OFF)
 FetchContent_Declare(
   libzmq
   GIT_REPOSITORY https://github.com/zeromq/libzmq.git
@@ -35,6 +42,8 @@ target_link_libraries(LOGGER PUBLIC
 target_include_directories(LOGGER PUBLIC
   include
 )
+
+include_directories(include/custom_types)
 
 add_library(ZMQ STATIC source/ZMQClient.cpp source/ZMQServer.cpp)
 target_link_libraries(ZMQ PUBLIC

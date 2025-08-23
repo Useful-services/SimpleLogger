@@ -9,7 +9,7 @@ int main() {
   client.start([&]{
     for (auto request_num = 0; request_num < 10; ++request_num) {
       std::cout << "Sending Hello " << request_num << "..." << std::endl;
-      client.send(data);
+      client.send_string(data);
       
       char buffer[1024];
       auto result = client.receive(buffer, sizeof(buffer));

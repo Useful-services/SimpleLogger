@@ -14,7 +14,7 @@ int main() {
         std::string request(buffer, result);
         std::cout << "Received " << request << std::endl;
       }
-      server.send(data);
+      server.send_string(data);
     }
   });
   

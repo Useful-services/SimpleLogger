@@ -20,7 +20,17 @@ int ZMQServer::receive(void* buffer, size_t size, int flags) {
   return zmq_recv(socket, buffer, size, flags);
 }
 
-int ZMQServer::send(const std::string& data, int flags) {
+int ZMQServer::send_array(const char* data, size_t size, int flags) {
+  return zmq_send(socket, data, size, flags);
+}
+
+int ZMQServer::send_data(const MQData& data, int flags) {
+  char raw_data[sizeof(MQData)];
+  data.to_buffer(raw_data);
+  return send_array(raw_data, sizeof(MQData), flags);
+}
+
+int ZMQServer::send_string(const std::string& data, int flags) {
   return zmq_send(socket, data.c_str(), data.length(), flags);
 }
 
